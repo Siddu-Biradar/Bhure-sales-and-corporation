@@ -3,7 +3,13 @@
 # ============================================
 # Handles sending messages via WhatsApp Web using pywhatkit
 
-import pywhatkit as kit
+try:
+    import pywhatkit as kit
+    PYWHATKIT_AVAILABLE = True
+except ImportError:
+    kit = None
+    PYWHATKIT_AVAILABLE = False
+
 import time
 import os
 import json
@@ -37,6 +43,12 @@ def save_message_log(log_entry):
     with open(MESSAGE_LOG, 'w', encoding='utf-8') as f:
         json.dump(history, f, indent=2, ensure_ascii=False)
 
+def _check_pywhatkit():
+    """Check if pywhatkit is available"""
+    if not PYWHATKIT_AVAILABLE:
+        return False, "WhatsApp sending not available on this server (requires local browser). Use locally on your Mac."
+    return True, ""
+
 def send_whatsapp_message(phone, message, wait_time=15):
     """
     Send a WhatsApp message to a single number.
@@ -51,6 +63,9 @@ def send_whatsapp_message(phone, message, wait_time=15):
     Returns:
         (success: bool, message: str)
     """
+    ok, err = _check_pywhatkit()
+    if not ok:
+        return False, err
     try:
         phone = str(phone).strip()
         if not phone.startswith('+'):
@@ -106,6 +121,9 @@ def send_whatsapp_message_instantly(phone, message):
     Send a WhatsApp message instantly (faster method).
     Uses pywhatkit's instant send feature.
     """
+    ok, err = _check_pywhatkit()
+    if not ok:
+        return False, err
     try:
         phone = str(phone).strip()
         if not phone.startswith('+'):
@@ -223,6 +241,9 @@ def send_personalized_messages(customer_message_list, delay_seconds=10):
 
 def send_image_message(phone, image_path, caption=''):
     """Send an image via WhatsApp"""
+    ok, err = _check_pywhatkit()
+    if not ok:
+        return False, err
     try:
         phone = str(phone).strip()
         if not phone.startswith('+'):
