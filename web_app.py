@@ -881,8 +881,10 @@ def api_send_arrivals():
     })
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5001))
+    debug = os.environ.get('RENDER') is None  # disable debug on Render
     print(f"\n  🏪 {SHOP_NAME} - Web Dashboard")
     print(f"  {'─' * 40}")
-    print(f"  🌐 Open: http://localhost:5001")
+    print(f"  🌐 Open: http://localhost:{port}")
     print(f"  Press Ctrl+C to stop\n")
-    app.run(debug=True, port=5001)
+    app.run(debug=debug, host='0.0.0.0', port=port)
