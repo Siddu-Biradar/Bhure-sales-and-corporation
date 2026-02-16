@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files (contain customer info)
+data/customers.xlsx
+data/bills.xlsx
+data/products.json
+data/festivals.json
+
+# Logs
+logs/
+
+# Environment
+.env
